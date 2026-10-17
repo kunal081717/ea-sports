@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cricket 26 - The Official Game of the Ashes | GameHub</title>
+
+<!-- ============ CSS ============ -->
+<style>
+:root{
+  --bg:#ffffff; --bg2:#f4f5f7; --text:#1d2330; --muted:#6b7280; --line:#e5e7eb;
+  --green:#12a150; --green-d:#0d8341; --orange:#ff8a00; --orange-d:#e07800;
+  --dark:#2b2f38; --card:#ffffff; --red:#e0243a; --star:#f5a623;
+}
+body.dark{
+  --bg:#12151b; --bg2:#1b1f27; --text:#e8eaf0; --muted:#9aa3b2; --line:#2a2f3a; --card:#171b22;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;transition:background .25s,color .25s}
+a{color:#1a6fe0;text-decoration:none}
+a:hover{text-decoration:underline}
+.container{max-width:1180px;margin:0 auto;padding:0 20px}
+
+/* Header */
+header{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.logo{font-size:24px;font-weight:800;letter-spacing:-.5px;display:flex;align-items:center;gap:8px;color:var(--text)}
+.logo i{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#2f7cf6,#12c2a0);display:inline-block}
+nav ul{display:flex;gap:22px;list-style:none}
+nav a{color:var(--text);font-size:14px;font-weight:500}
+.nav-right{display:flex;gap:10px;align-items:center}
+.search{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--bg2)}
+.search input{border:0;background:transparent;padding:8px 14px;width:190px;color:var(--text);outline:none;font-size:14px}
+.search button{border:0;background:transparent;padding:0 12px;cursor:pointer;color:var(--text)}
+.icon-btn{border:1px solid var(--line);background:var(--bg2);color:var(--text);border-radius:50%;width:38px;height:38px;cursor:pointer;font-size:16px}
+.menu-btn{display:none}
+
+.crumbs{font-size:12px;color:var(--muted);padding:18px 0 14px}
+.crumbs a{color:var(--muted)}
+
+/* Layout */
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:32px;align-items:start}
+.app-head{display:flex;gap:16px;align-items:center;margin-bottom:20px}
+.app-icon{width:76px;height:76px;border-radius:14px;flex-shrink:0;background:linear-gradient(135deg,#0b2a5b,#c9202f);display:grid;place-items:center;color:#fff;font-weight:800;font-size:15px;text-align:center;line-height:1.1;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+h1{font-size:30px;line-height:1.2}
+h1 small{font-size:13px;color:var(--muted);font-weight:500}
+.meta{font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:12px;margin-top:4px}
+.stars{color:var(--star)}
+
+.tabs{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:22px}
+.tab{padding:10px 16px;border:0;background:none;cursor:pointer;font-size:14px;color:var(--muted);border-bottom:3px solid transparent;font-weight:600}
+.tab.active{color:var(--text);border-color:var(--text)}
+.panel{display:none}.panel.active{display:block}
+
+h2{font-size:22px;margin:26px 0 10px}
+h3{font-size:17px;margin:24px 0 8px}
+p{margin-bottom:14px;color:var(--text);font-size:15px}
+
+.alt-box{border:1px solid var(--green);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:14px;margin:8px 0 22px;background:var(--card)}
+.alt-box .thumb{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,#444,#999)}
+.alt-box .info{flex:1;font-size:14px;font-weight:600}
+.alt-box .info span{color:var(--muted);font-weight:400;margin-left:12px}
+.btn-sq{width:36px;height:36px;border-radius:8px;border:0;background:var(--green);color:#fff;cursor:pointer;font-size:16px}
+.label-sm{font-size:12px;font-weight:700;margin-bottom:6px}
+
+/* Pros / Cons */
+.pc{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:10px}
+.pc h4{font-size:18px;padding-bottom:10px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.pc li{list-style:none;font-size:14px;padding:6px 0 6px 26px;position:relative}
+.pros li::before{content:"✓";color:var(--green);position:absolute;left:0;font-weight:700}
+.cons li::before{content:"✕";color:var(--red);position:absolute;left:0;font-weight:700}
+
+/* Sidebar */
+aside .btn{display:flex;justify-content:space-between;align-items:center;width:100%;padding:14px 18px;border:0;border-radius:8px;color:#fff;cursor:pointer;margin-bottom:12px;text-align:left;font-size:15px;font-weight:700;transition:transform .1s,background .2s}
+aside .btn small{display:block;font-weight:400;font-size:12px;opacity:.9}
+aside .btn:active{transform:scale(.98)}
+.btn-green{background:var(--green)}.btn-green:hover{background:var(--green-d)}
+.btn-orange{background:var(--orange)}.btn-orange:hover{background:var(--orange-d)}
+.specs{background:var(--bg2);border-radius:10px;padding:14px;margin-top:6px}
+.shot{height:150px;border-radius:6px;background:linear-gradient(160deg,#1d6b2f 0%,#3fa75a 45%,#c9b27a 100%);position:relative;overflow:hidden;margin-bottom:14px}
+.shot::after{content:"1/4";position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;padding:2px 8px;border-radius:4px}
+.specs h4{font-size:16px;margin-bottom:10px}
+.spec{font-size:12.5px;margin-bottom:10px}
+.spec b{display:block;color:var(--muted);font-weight:500;font-size:11.5px}
+.spec span{font-weight:600}
+.share{display:flex;justify-content:center;gap:10px;margin:12px 0}
+.share button{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--text);background:none;color:var(--text);cursor:pointer;font-size:12px}
+.btn-dark{background:var(--dark);color:#fff;border:0;border-radius:6px;width:100%;padding:9px;cursor:pointer;font-size:13px}
+.side-links a{display:block;font-size:13px;margin-top:10px}
+.related{margin-top:22px}
+.related h4{font-size:15px;margin-bottom:10px}
+.related a{display:flex;justify-content:space-between;background:var(--dark);color:#fff;padding:11px 14px;border-radius:7px;margin-bottom:8px;font-size:14px;font-weight:600}
+.related a:hover{background:#3b404c;text-decoration:none}
+
+/* Platforms / Languages */
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{border:1px solid var(--line);border-radius:6px;padding:9px 14px;font-size:12.5px;background:var(--card)}
+.langs{font-size:13px;line-height:2.1}
+.langs a{margin-right:14px;display:inline-block}
+
+/* Reviews */
+.rating-box{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:10px;padding:14px 20px;background:var(--card)}
+.rating-big{font-size:42px;font-weight:300}
+.btn-dk{background:var(--dark);color:#fff;border:0;border-radius:6px;padding:10px 26px;cursor:pointer;font-size:13px}
+.review{padding:16px 0;border-bottom:1px solid var(--line)}
+.rev-top{display:flex;gap:12px;align-items:center}
+.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700}
+.rev-top b{font-size:14px;display:block}
+.rev-top small{color:var(--muted);font-size:11.5px}
+.review h5{margin:8px 0 2px;font-size:14px}
+.rev-actions{font-size:11.5px;color:var(--muted);margin-top:8px}
+.rev-actions button{border:0;background:none;color:var(--muted);cursor:pointer;margin-right:14px;font-size:11.5px}
+.rev-actions button:hover{color:var(--text)}
+.review-form{display:none;border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;background:var(--card)}
+.review-form.open{display:block}
+.review-form input,.review-form textarea,.review-form select{width:100%;margin-bottom:10px;padding:9px 12px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--text);font:inherit;font-size:14px}
+.sort{display:flex;justify-content:flex-end;font-size:12px;color:var(--muted);gap:6px;align-items:center;border-bottom:1px solid var(--line);padding:6px 0}
+.sort select{border:0;background:none;color:var(--text);font-size:12px;font-weight:600}
+
+/* Top downloads */
+.side-box{margin-top:30px}
+.side-box h4{font-size:15px;margin-bottom:12px}
+.top-item{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+.top-item .ic{width:42px;height:42px;border-radius:9px;flex-shrink:0}
+.top-item b{font-size:13.5px;display:block;line-height:1.3}
+.top-item small{font-size:11.5px;color:var(--muted)}
+.btn-outline{display:block;margin:18px auto;border:1.5px solid var(--text);background:none;color:var(--text);border-radius:6px;padding:8px 40px;cursor:pointer;font-size:13px}
+.topics a{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:8px 14px;margin:0 8px 8px 0;font-size:12px;color:var(--muted)}
+
+/* FAQ */
+.faq-item{border-bottom:1px solid var(--line)}
+.faq-q{width:100%;text-align:left;background:none;border:0;padding:14px 0;font-size:15px;font-weight:600;cursor:pointer;color:var(--text);display:flex;justify-content:space-between}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s;font-size:14px;color:var(--muted)}
+.faq-item.open .faq-a{max-height:200px;padding-bottom:14px}
+.faq-item.open .faq-q span{transform:rotate(45deg)}
+.faq-q span{transition:transform .2s;font-size:20px}
+
+/* Cards */
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.card{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--card);transition:transform .2s,box-shadow .2s;cursor:pointer}
+.card:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(0,0,0,.12)}
+.card .img{height:130px;border-radius:7px;margin-bottom:10px}
+.card .row{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+.card b{display:block;font-size:14px;margin-top:4px}
+.card small{color:var(--muted);font-size:12px}
+
+footer{margin-top:60px;background:var(--bg2);border-top:1px solid var(--line);padding:34px 0;font-size:13px;color:var(--muted);text-align:center}
+
+/* Toast */
+#toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,80px);background:var(--dark);color:#fff;padding:12px 22px;border-radius:8px;font-size:14px;opacity:0;transition:.3s;z-index:99;max-width:90%}
+#toast.show{transform:translate(-50%,0);opacity:1}
+
+/* Responsive */
+@media(max-width:960px){
+  .layout{grid-template-columns:1fr}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  nav{display:none;position:absolute;top:64px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--line);padding:14px 20px}
+  nav.open{display:block}
+  nav ul{flex-direction:column}
+  .menu-btn{display:block}
+  .search input{width:110px}
+}
+@media(max-width:560px){
+  h1{font-size:23px}
+  .pc{grid-template-columns:1fr}
+  .search{display:none}
+}
+</style>
+</head>
+
+<!-- ============ HTML ============ -->
+<body>
+
+<header>
+  <div class="container nav">
+    <button class="icon-btn menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+    <a href="#" class="logo"><i></i>GameHub</a>
+    <nav id="mainNav">
+      <ul>
+        <li><a href="#">Apps</a></li>
+        <li><a href="#">Games</a></li>
+        <li><a href="#">AI</a></li>
+        <li><a href="#">News</a></li>
+        <li><a href="#">Developers</a></li>
+      </ul>
+    </nav>
+    <div class="nav-right">
+      <form class="search" id="searchForm">
+        <input type="text" id="searchInput" placeholder="Search games...">
+        <button type="submit">🔍</button>
+      </form>
+      <button class="icon-btn" id="themeBtn" title="Toggle dark mode">🌙</button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="crumbs">
+    <a href="#">Home</a> / <a href="#">Windows</a> / <a href="#">Games</a> / <a href="#">Sports</a> / Cricket 26 - The Official Game Of The Ashes
+  </div>
+
+  <div class="layout">
+    <!-- MAIN COLUMN -->
+    <main>
+      <div class="app-head">
+        <div class="app-icon">CRICKET<br>26</div>
+        <div>
+          <h1>Cricket 26 - The Official Game of the Ashes <small>for Windows</small></h1>
+          <div class="meta">
+            <span>Paid</span>
+            <span><span class="stars">★</span> 4.5 (50 👥)</span>
+            <span>⬇ 305.5K</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="info">Information</button>
+        <button class="tab" data-tab="alt">Alternative apps</button>
+      </div>
+
+      <!-- Information tab -->
+      <section class="panel active" id="info">
+        <h2>Cricket game realized</h2>
+        <p><b>Cricket 26: The Official Game of the Ashes</b> delivers a very complete cricket simulation, giving players not only on-field control but also a sense of management over their teams and careers. Players experience a game of cricket with improved on-field mechanics, batting, and bowling systems that feel more nuanced than previous entries.</p>
+
+        <div class="label-sm">Top Recommended Alternative</div>
+        <div class="alt-box">
+          <div class="thumb"></div>
+          <div class="info">World of Warships <span>Free</span> <span class="stars">★ 4</span></div>
+          <button class="btn-sq" data-toast="Alternative opened (demo)">⬇</button>
+        </div>
+
+        <p>The game makes timing, shot placement, after-touch control, and footwork matter, which pushes players to judge deliveries carefully rather than simply spamming buttons. The Management Career Mode also enhances the fantasy draft experience, catering to people who prefer a deeper sense of choice.</p>
+
+        <h2>From rookie to legend</h2>
+        <p>The game mechanics have received serious upgrades. Bowling, batting, and fielding animations have been refined: bowlers now have distinct actions matching real-life bowling, and fielding, such as the saves, throws, and catches, has improved compared to previous games. Running between wickets and shot selection feel more fluid and realistic, especially when playing on greater difficulties. Although tough, the hardened mechanics can be unforgiving for beginners.</p>
+        <p>Added to the deeper gameplay changes are the way weather, pitch wear, and crowd stadium effects factor into how they can influence match flow, forcing players to adapt strategies mid-game. On the management side, decisions off the field influence team performance, adding a strategic layer beyond just match-by-match gameplay.</p>
+        <p>It is a clear step forward compared to earlier games. Player models, stadiums, lighting, crowd animations, pitch wear, and environmental effects (rain, changing pitch) all contribute to making matches feel more cinematic and vibrant. Bat-ball contact, hit sound effects, and nicely handled replays make individual match moments much more satisfying and believable. However, it's not perfect — some player faces either look generic or inaccurate.</p>
+
+        <h2>A refined and immersive cricket experience</h2>
+        <p>Cricket 26: The Official Game of the Ashes stands out as the most polished and strategically rich entry in the series, offering deep mechanical control and a strong sense of on-field authenticity. Its improved animations, dynamic pitch and weather systems, and robust management features create a genuinely immersive cricket simulation. While its advanced mechanics may challenge newcomers, seasoned cricket fans will appreciate the realism, depth, and replay value in every bit.</p>
+
+        <div class="pc">
+          <div class="pros"><h4>Pros</h4>
+            <ul>
+              <li>Deep, refined batting, bowling, and fielding mechanics</li>
+              <li>Dynamic pitch, weather, and crowd effects</li>
+              <li>Strong Management Career and Ashes Modes</li>
+              <li>Cinematic presentation and enhanced animations</li>
+              <li>Increased strategic depth</li>
+            </ul>
+          </div>
+          <div class="cons"><h4>Cons</h4>
+            <ul>
+              <li>Harder learning curve for beginners</li>
+              <li>Some player faces look generic</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 style="margin-top:34px">Also available in other platforms</h3>
+        <div class="chips">
+          <div class="chip">Cricket 26 for Xbox Series X|S</div>
+          <div class="chip">Cricket 26 for PlayStation 5</div>
+          <div class="chip">Cricket 26 for Xbox One</div>
+          <div class="chip">Cricket 26 for PlayStation 4</div>
+        </div>
+
+        <h3 style="margin-top:30px">Program available in other languages</h3>
+        <div class="langs">
+          <a href="#">Télécharger Cricket 26 [FR]</a><a href="#">Pobierz Cricket 26 [PL]</a><a href="#">ダウンロード [JA]</a>
+          <a href="#">تحميل Cricket 26 [AR]</a><a href="#">Download Cricket 26 [NL]</a><a href="#">Unduh Cricket 26 [ID]</a>
+          <a href="#">Baixar Cricket 26 [PT]</a><a href="#">Scarica Cricket 26 [IT]</a><a href="#">Cricket 26 herunterladen [DE]</a>
+          <a href="#">Descargar Cricket 26 [ES]</a><a href="#">Cricket 26 indir [TR]</a>
+        </div>
+
+        <h2>Frequently asked questions</h2>
+        <div id="faq">
+          <div class="faq-item"><button class="faq-q">Is Cricket 26 free? <span>+</span></button><div class="faq-a">No. It is a paid game. Check the official store for the current price.</div></div>
+          <div class="faq-item"><button class="faq-q">Which platforms is it on? <span>+</span></button><div class="faq-a">Windows PC, Xbox Series X|S, Xbox One, PlayStation 5 and PlayStation 4.</div></div>
+          <div class="faq-item"><button class="faq-q">Is it hard for beginners? <span>+</span></button><div class="faq-a">The batting and bowling systems reward timing and practice, so expect a learning curve. Tutorials and lower difficulties help.</div></div>
+          <div class="faq-item"><button class="faq-q">Does it have a career mode? <span>+</span></button><div class="faq-a">Yes, there is a Management Career Mode and a dedicated Ashes Mode.</div></div>
+        </div>
+
+        <!-- Reviews -->
+        <h2>User reviews</h2>
+        <div class="rating-box">
+          <div style="display:flex;align-items:center;gap:12px">
+            <span class="rating-big" id="avgRating">4.5</span>
+            <div><div class="stars" id="avgStars">★★★★☆</div><small style="color:var(--muted)" id="revCount">2 reviews</small></div>
+          </div>
+          <button class="btn-dk" id="addReviewBtn">Add review</button>
+        </div>
+
+        <form class="review-form" id="reviewForm">
+          <input type="text" id="rName" placeholder="Your name" required maxlength="30">
+          <select id="rStars">
+            <option value="5">★★★★★ (5)</option><option value="4">★★★★ (4)</option>
+            <option value="3">★★★ (3)</option><option value="2">★★ (2)</option><option value="1">★ (1)</option>
+          </select>
+          <input type="text" id="rTitle" placeholder="Review title" required maxlength="50">
+          <textarea id="rText" rows="3" placeholder="Write your review..." required maxlength="400"></textarea>
+          <button class="btn-dk" type="submit">Submit review</button>
+        </form>
+
+        <h3>Main reviews for you</h3>
+        <div class="sort">Sort By:
+          <select id="sortSel"><option value="latest">Latest</option><option value="high">Highest rated</option><option value="low">Lowest rated</option></select>
+        </div>
+        <div id="reviewList"></div>
+      </section>
+
+      <!-- Alternatives tab -->
+      <section class="panel" id="alt">
+        <h2>Alternatives to Cricket 26</h2>
+        <div class="cards" id="altCards"></div>
+      </section>
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside>
+      <button class="btn btn-green" data-toast="Demo page: connect this button to the official download link.">
+        <div>Download<small>for Windows</small></div> <span>⬇</span>
+      </button>
+      <button class="btn btn-orange" data-toast="Demo page: connect this button to a trusted store link.">
+        <div>Buy now<small>From trusted partner</small></div> <span>🛒</span>
+      </button>
+
+      <div class="specs">
+        <div class="shot"></div>
+        <h4>App specs</h4>
+        <div class="spec"><b>Developer</b><a href="#">NACON</a> | <a href="#">More programs (15)</a></div>
+        <div class="spec"><b>License</b><span>Full</span></div>
+        <div class="spec"><b>Version</b><span>varies-with-devices</span></div>
+        <div class="spec"><b>Latest update</b><span>December 22, 2025</span></div>
+        <div class="spec"><b>Platform</b><span>Windows</span><br><a href="#">Other platforms (4)</a></div>
+        <div class="spec"><b>OS</b><span>Windows 10</span></div>
+        <div class="spec"><b>Language</b><span>English</span></div>
+        <div class="spec"><b>Downloads</b><span>305.5K</span></div>
+        <div class="share">
+          <button data-toast="Shared on Facebook (demo)">f</button>
+          <button data-toast="Shared on X (demo)">X</button>
+          <button id="copyLink">🔗</button>
+        </div>
+        <button class="btn-dark" id="sideReview">Add review</button>
+        <div class="side-links">
+          <a href="#" data-toast="Report sent (demo)">⚑ Report Software</a>
+          <a href="#" id="toAlt">✦ Alternative apps</a>
+        </div>
+      </div>
+
+      <div class="related">
+        <h4>Related searches</h4>
+        <a href="#">Free Download Cricket Game <span>🔍</span></a>
+        <a href="#">Cricket 26 Game Review <span>🔍</span></a>
+        <a href="#">Cricket Game for Pc <span>🔍</span></a>
+        <a href="#">Cricket 2020 Game Download <span>🔍</span></a>
+      </div>
+
+      <div class="side-box">
+        <h4>Top downloads <small style="color:var(--muted);font-weight:400;display:block">Sports Games</small></h4>
+        <div id="topList"></div>
+        <button class="btn-outline" data-toast="No more items in demo">More</button>
+      </div>
+
+      <div class="side-box topics">
+        <h4>Related topics <small style="color:var(--muted);font-weight:400;display:block">about Cricket 26</small></h4>
+        <a href="#">Sports Games</a><a href="#">Cricket Games</a><a href="#">Simulation Games</a><a href="#">Career Mode Games</a><a href="#">PlayStation 4 Games</a>
+      </div>
+    </aside>
+  </div>
+
+  <h2 style="margin-top:50px">You may also like</h2>
+  <div class="cards" id="likeCards"></div>
+</div>
+
+<footer>
+  <div class="container">© 2026 GameHub — demo page for learning purposes. All game names belong to their respective owners.</div>
+</footer>
+
+<div id="toast"></div>
+
+<!-- ============ JAVASCRIPT ============ -->
+<script>
+(function(){
+  const $ = (s,c=document)=>c.querySelector(s);
+  const $$ = (s,c=document)=>[...c.querySelectorAll(s)];
+
+  /* Toast */
+  let tt;
+  function toast(msg){
+    const t=$('#toast'); t.textContent=msg; t.classList.add('show');
+    clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),2600);
+  }
+  $$('[data-toast]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();toast(b.dataset.toast)}));
+
+  /* Dark mode */
+  const themeBtn=$('#themeBtn');
+  try{ if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark');themeBtn.textContent='☀️'} }catch(e){}
+  themeBtn.addEventListener('click',()=>{
+    const d=document.body.classList.toggle('dark');
+    themeBtn.textContent=d?'☀️':'🌙';
+    try{localStorage.setItem('theme',d?'dark':'light')}catch(e){}
+  });
+
+  /* Mobile menu */
+  $('#menuBtn').addEventListener('click',()=>$('#mainNav').classList.toggle('open'));
+
+  /* Search (demo) */
+  $('#searchForm').addEventListener('submit',e=>{
+    e.preventDefault();
+    const v=$('#searchInput').value.trim();
+    toast(v?`Searching for "${v}" (demo)`:'Type something to search');
+  });
+
+  /* Tabs */
+  function openTab(id){
+    $$('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===id));
+    $$('.panel').forEach(p=>p.classList.toggle('active',p.id===id));
+    window.scrollTo({top:150,behavior:'smooth'});
+  }
+  $$('.tab').forEach(t=>t.addEventListener('click',()=>openTab(t.dataset.tab)));
+  $('#toAlt').addEventListener('click',e=>{e.preventDefault();openTab('alt')});
+
+  /* Copy link */
+  $('#copyLink').addEventListener('click',()=>{
+    if(navigator.clipboard){navigator.clipboard.writeText(location.href).then(()=>toast('Link copied!'),()=>toast('Could not copy'))}
+    else toast('Copy not supported');
+  });
+
+  /* FAQ accordion */
+  $$('.faq-q').forEach(q=>q.addEventListener('click',()=>q.parentElement.classList.toggle('open')));
+
+  /* Data */
+  const grads=[
+    'linear-gradient(135deg,#1f4eb5,#8bc3ff)','linear-gradient(135deg,#0f7a4a,#9be0b4)',
+    'linear-gradient(135deg,#7b2cbf,#e0aaff)','linear-gradient(135deg,#c1121f,#ff9f9f)',
+    'linear-gradient(135deg,#ff8a00,#ffd27a)','linear-gradient(135deg,#222,#777)'
+  ];
+  const topDownloads=[
+    ['eFootball PES 2021 Season','An update for PES 2021 game'],
+    ['Cricket 26 - The Official Game','Cricket game realized'],
+    ['FIFA 22','Assemble legends and dominate'],
+    ['Dream League Soccer 2023','Soccer action, realism, and glory'],
+    ['Cricket 24','A comprehensive, high-stakes cricket game']
+  ];
+  $('#topList').innerHTML=topDownloads.map((t,i)=>
+    `<div class="top-item"><div class="ic" style="background:${grads[i%grads.length]}"></div><div><b>${t[0]}</b><small>${t[1]}</small></div></div>`).join('');
+
+  const likes=[
+    ['Cricket 24','A comprehensive, high-stakes cricket game','4.7','Paid'],
+    ['Cricket 19','An immersive cricket experience','4.3','Paid'],
+    ['Cricket Legends','Enjoy the game with legends','4.2','Paid'],
+    ['Cricket Pro 17','Take your cricket legacy to heights','4.3','Paid']
+  ];
+  function cardHTML(a,i){
+    return `<div class="card" data-toast-card="${a[0]}"><div class="img" style="background:${grads[i%grads.length]}"></div>
+      <div class="row"><span><span class="stars">★</span> ${a[2]}</span><span>${a[3]}</span></div><b>${a[0]}</b><small>${a[1]}</small></div>`;
+  }
+  $('#likeCards').innerHTML=likes.map(cardHTML).join('');
+  const alts=[
+    ['Prison Architect 2','Premium mission expansion pack','4.0','Paid'],
+    ['Brian Lara International','Codemasters makes cricket accessible','3.8','Trial'],
+    ['Out of the Park Baseball','A grand slam in sports simulation','4.1','Paid'],
+    ['Bakken: Ski Jumping','Compete against other athletes','4.8','Paid'],
+    ['Clothing Supermarket','Build your dream fashion empire','3.0','Paid'],
+    ['World of Warships','Naval battles online','4.0','Free']
+  ];
+  $('#altCards').innerHTML=alts.map((a,i)=>cardHTML(a,i+2)).join('');
+  document.addEventListener('click',e=>{
+    const c=e.target.closest('[data-toast-card]');
+    if(c) toast(`${c.dataset.toastCard} — demo card`);
+  });
+
+  /* Reviews */
+  let reviews=[
+    {name:'Ibrahim Maqsood',stars:5,title:'Https',text:'This is very good game',date:'August 2, 2026',ts:2,helpful:2,not:3},
+    {name:'Sajid Jamali',stars:4,title:'Sajid',text:'Real cricket',date:'July 18, 2026',ts:1,helpful:1,not:1}
+  ];
+  const colors=['#e8478b','#7b4be0','#e0803a','#2d9cdb','#27ae60'];
+  const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  function render(){
+    const mode=$('#sortSel').value;
+    const list=[...reviews];
+    if(mode==='latest') list.sort((a,b)=>b.ts-a.ts);
+    if(mode==='high') list.sort((a,b)=>b.stars-a.stars);
+    if(mode==='low') list.sort((a,b)=>a.stars-b.stars);
+    $('#reviewList').innerHTML=list.map(r=>{
+      const idx=reviews.indexOf(r);
+      return `<div class="review">
+        <div class="rev-top">
+          <div class="avatar" style="background:${colors[idx%colors.length]}">${esc(r.name[0].toUpperCase())}</div>
+          <div><b>${esc(r.name)}</b><small><span class="stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</span> ${r.date}</small></div>
+        </div>
+        <h5>${esc(r.title)}</h5><div style="font-size:14px">${esc(r.text)}</div>
+        <div class="rev-actions">
+          <button data-vote="helpful" data-i="${idx}">👍 Helpful (${r.helpful})</button>
+          <button data-vote="not" data-i="${idx}">👎 Not Helpful (${r.not})</button>
+        </div></div>`;
+    }).join('');
+    const avg=reviews.reduce((s,r)=>s+r.stars,0)/reviews.length;
+    $('#avgRating').textContent=avg.toFixed(1);
+    const full=Math.round(avg);
+    $('#avgStars').textContent='★'.repeat(full)+'☆'.repeat(5-full);
+    $('#revCount').textContent=`${reviews.length} review${reviews.length>1?'s':''}`;
+  }
+  render();
+
+  $('#reviewList').addEventListener('click',e=>{
+    const b=e.target.closest('[data-vote]'); if(!b) return;
+    const r=reviews[+b.dataset.i]; r[b.dataset.vote]++; render();
+  });
+  $('#sortSel').addEventListener('change',render);
+
+  const form=$('#reviewForm');
+  function toggleForm(){form.classList.toggle('open'); if(form.classList.contains('open')) $('#rName').focus();}
+  $('#addReviewBtn').addEventListener('click',toggleForm);
+  $('#sideReview').addEventListener('click',()=>{form.classList.add('open');form.scrollIntoView({behavior:'smooth',block:'center'});$('#rName').focus();});
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    reviews.push({
+      name:$('#rName').value.trim(), stars:+$('#rStars').value,
+      title:$('#rTitle').value.trim(), text:$('#rText').value.trim(),
+      date:new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}),
+      ts:Date.now(), helpful:0, not:0
+    });
+    form.reset(); form.classList.remove('open'); render(); toast('Thanks! Your review was added.');
+  });
+})();
+</script>
+</body>
+</html>
